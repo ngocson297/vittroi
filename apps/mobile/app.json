@@ -1,16 +1,18 @@
 {
   "expo": {
     "name": "Vịt Trời",
-    "slug": "mobile",
+    "slug": "vit-troi",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "mobile",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.ngocson297.vittroi"
     },
     "android": {
+      "package": "com.ngocson297.vittroi",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -38,6 +40,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3ae81ed9-86ce-4e9d-b010-2c6bca95197c"
+      }
+    },
+    "owner": "sonnynguyen.297"
   }
 }
