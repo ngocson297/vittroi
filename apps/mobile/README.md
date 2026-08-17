@@ -1,4 +1,4 @@
-# Welcome to your Expo app 👋
+# Vịt Trời Mobile
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
@@ -54,3 +54,70 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+## Authentication and API setup
+
+Expo SDK 57 mobile application for Vịt Trời.
+
+## Configure the API
+
+Copy the example environment file before starting Expo:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Set `EXPO_PUBLIC_API_BASE_URL` to the reachable NestJS API address:
+
+```env
+EXPO_PUBLIC_API_BASE_URL=http://192.168.1.100:3000
+```
+
+The committed address is an example only. On a physical phone, `localhost`
+points to the phone, not the development computer. Use the computer's LAN IP,
+keep both devices on the same network, and allow local firewall access to port
+`3000`. Local HTTP is for development only; deployed APIs should use HTTPS.
+
+`EXPO_PUBLIC_*` values are embedded in the client application and must never
+contain JWT secrets, database credentials, signing keys, or private tokens.
+
+## Run locally
+
+Start PostgreSQL and the API from `apps/api`, then run the mobile app from this
+directory:
+
+```powershell
+npm install
+npm start
+```
+
+The app restores authentication by reading tokens from SecureStore and
+validating them with `GET /auth/me`. Access-token failures trigger one
+single-flight refresh and one retry. Logout attempts backend revocation before
+always clearing local credentials.
+
+On Android and iOS, the access and refresh token pair is stored as one small,
+atomic encrypted SecureStore value. SecureStore does not provide a web storage
+backend, so Expo web intentionally keeps tokens in memory only and does not
+restore sessions after a browser reload.
+
+## Validation
+
+```powershell
+npm run typecheck
+npm run lint
+npm test
+npx expo config --type public
+```
+
+With the local API running, the opt-in contract integration test is available:
+
+```powershell
+$env:RUN_MOBILE_AUTH_INTEGRATION='1'
+npm run test:integration:auth
+```
+
+It creates only a timestamped `mobile.test.*@example.com` account; remove that
+targeted test account after verification.
+
+## Original Expo starter notes
