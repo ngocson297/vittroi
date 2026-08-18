@@ -5,3 +5,12 @@ export const AUTH_ENDPOINTS = {
   logout: '/auth/logout',
   me: '/auth/me',
 } as const;
+
+export const PROFILE_ENDPOINTS = {
+  me: '/me/profile',
+} as const;
+
+export const PREGNANCY_ENDPOINTS = {
+  list: '/me/pregnancies',
+  current: '/me/pregnancies/current',
+} as const;

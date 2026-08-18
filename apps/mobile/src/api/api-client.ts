@@ -17,7 +17,7 @@ interface ApiClientOptions {
 }
 
 interface ApiRequestOptions {
-  method?: 'GET' | 'POST';
+  method?: 'GET' | 'POST' | 'PATCH';
   body?: unknown;
   authenticated?: boolean;
   retryAfterRefresh?: boolean;

@@ -35,9 +35,17 @@ export function toUserMessage(error: unknown): string {
         return 'Tài khoản hiện không hoạt động.';
       case 'AUTH_EMAIL_ALREADY_EXISTS':
         return 'Email này đã được sử dụng.';
+      case 'PROFILE_ALREADY_EXISTS':
+        return 'Hồ sơ của bạn đã được tạo trước đó.';
+      case 'PROFILE_REQUIRED':
+        return 'Vui lòng hoàn tất thông tin của mẹ trước.';
+      case 'PROFILE_NOT_FOUND':
+        return 'Không tìm thấy hồ sơ của bạn.';
+      case 'ACTIVE_PREGNANCY_ALREADY_EXISTS':
+        return 'Bạn đã có một thai kỳ đang hoạt động.';
       case 'NETWORK_ERROR':
       case 'REQUEST_TIMEOUT':
-        return 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối và thử lại.';
+        return 'Không thể kết nối đến máy chủ. Vui lòng thử lại.';
       default:
         return FALLBACK_MESSAGE;
     }

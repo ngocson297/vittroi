@@ -27,4 +27,12 @@ describe('API errors', () => {
       'Không thể kết nối đến máy chủ',
     );
   });
+
+  it.each([
+    ['PROFILE_ALREADY_EXISTS', 'Hồ sơ của bạn đã được tạo trước đó.'],
+    ['PROFILE_REQUIRED', 'Vui lòng hoàn tất thông tin của mẹ trước.'],
+    ['ACTIVE_PREGNANCY_ALREADY_EXISTS', 'Bạn đã có một thai kỳ đang hoạt động.'],
+  ])('maps %s to Vietnamese onboarding copy', (code, message) => {
+    expect(toUserMessage(new ApiError(409, code))).toBe(message);
+  });
 });

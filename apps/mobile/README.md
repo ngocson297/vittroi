@@ -96,6 +96,27 @@ validating them with `GET /auth/me`. Access-token failures trigger one
 single-flight refresh and one retry. Logout attempts backend revocation before
 always clearing local credentials.
 
+After authentication, the app resolves onboarding from backend data in this
+order: `GET /me/profile`, then `GET /me/pregnancies/current`. A missing profile
+opens Mother Profile onboarding; an existing profile without an active
+pregnancy opens Pregnancy Setup; complete data opens Pregnancy Home. Route
+guards prevent authenticated users from bypassing an incomplete step.
+
+The typed mobile API layer supports:
+
+```text
+GET   /me/profile
+POST  /me/profile
+PATCH /me/profile
+GET   /me/pregnancies
+GET   /me/pregnancies/current
+POST  /me/pregnancies
+```
+
+Profile and pregnancy calendar dates use strict `YYYY-MM-DD` API values. The UI
+accepts and displays `DD/MM/YYYY`, and pregnancy progress is derived locally
+with calendar-day arithmetic rather than stored as changing data.
+
 On Android and iOS, the access and refresh token pair is stored as one small,
 atomic encrypted SecureStore value. SecureStore does not provide a web storage
 backend, so Expo web intentionally keeps tokens in memory only and does not

@@ -106,6 +106,32 @@ default session lifetime of 30 days. Only SHA-256 refresh-token digests are
 stored. Passwords are hashed with Argon2id. Never put real secrets or tokens in
 documentation or source control.
 
+## Mother profile and pregnancy onboarding
+
+All onboarding routes require a valid access-token bearer session. Ownership is
+always derived from that session; clients cannot select a `userId` or
+`motherProfileId`.
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| `GET` | `/me/profile` | Return `{ "profile": null }` or the current user's mother profile |
+| `POST` | `/me/profile` | Create the current user's one mother profile |
+| `PATCH` | `/me/profile` | Update `fullName` and/or `dateOfBirth` |
+| `GET` | `/me/pregnancies` | List only the current user's pregnancy history, ACTIVE first |
+| `GET` | `/me/pregnancies/current` | Return `{ "pregnancy": null }` or the ACTIVE pregnancy |
+| `POST` | `/me/pregnancies` | Create an ACTIVE pregnancy for the current user's profile |
+
+`dateOfBirth`, `dueDate`, and `actualBirthDate` use strict calendar-date values
+in `YYYY-MM-DD` format. Birth dates are accepted from `1900-01-01` through the
+server's current local date. Onboarding due dates are accepted from 21 days
+before through 300 days after that date, inclusive.
+
+A user may have one mother profile. A profile may have multiple COMPLETED
+pregnancies, but PostgreSQL migration
+`20260818090000_enforce_single_active_pregnancy` adds a partial unique index so
+it can have at most one ACTIVE pregnancy, including under concurrent requests.
+Gestational age and days remaining are derived by clients and are not stored.
+
 ## Validation
 
 With PostgreSQL running and `.env` configured:

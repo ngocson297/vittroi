@@ -3,6 +3,7 @@ generator client {
   output              = "../src/generated/prisma"
   moduleFormat        = "cjs"
   importFileExtension = ""
+  previewFeatures     = ["partialIndexes"]
 }
 
 datasource db {
@@ -75,6 +76,7 @@ model Pregnancy {
   updatedAt       DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
   motherProfile   MotherProfile   @relation(fields: [motherProfileId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
+  @@unique([motherProfileId], map: "pregnancies_one_active_per_mother_profile", where: { status: "ACTIVE" })
   @@index([motherProfileId])
   @@index([status])
   @@index([dueDate])

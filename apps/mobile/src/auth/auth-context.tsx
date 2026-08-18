@@ -23,15 +23,16 @@ type AuthContextValue = AuthState & {
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
+const ApiClientContext = createContext<ApiClient | null>(null);
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
   const [client] = useState(
     () =>
       new ApiClient({
-      getBaseUrl: getApiBaseUrl,
-      storage: authTokenStorage,
-      onAuthInvalidated: () => dispatch({ type: 'UNAUTHENTICATED' }),
+        getBaseUrl: getApiBaseUrl,
+        storage: authTokenStorage,
+        onAuthInvalidated: () => dispatch({ type: 'UNAUTHENTICATED' }),
       }),
   );
   const authApi = useMemo(() => new AuthApi(client), [client]);
@@ -100,11 +101,21 @@ export function AuthProvider({ children }: PropsWithChildren) {
     [state, register, login, logout],
   );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <ApiClientContext.Provider value={client}>
+      <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+    </ApiClientContext.Provider>
+  );
 }
 
 export function useAuth(): AuthContextValue {
   const context = useContext(AuthContext);
   if (!context) throw new Error('useAuth must be used inside AuthProvider');
   return context;
+}
+
+export function useApiClient(): ApiClient {
+  const client = useContext(ApiClientContext);
+  if (!client) throw new Error('useApiClient must be used inside AuthProvider');
+  return client;
 }
